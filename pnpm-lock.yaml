@@ -23,9 +23,15 @@ importers:
       '@repo/backend-common':
         specifier: workspace:*
         version: link:../../packages/backend-common
+      '@repo/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
+      '@repo/zod':
+        specifier: workspace:*
+        version: link:../../packages/zod
       '@types/express':
         specifier: ^5.0.5
         version: 5.0.5
