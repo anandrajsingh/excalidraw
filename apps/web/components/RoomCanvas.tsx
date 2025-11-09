@@ -7,10 +7,13 @@ export function RoomCanvas({ roomId }: { roomId: string }) {
     const canvasRef = useRef<HTMLCanvasElement>(null)
     
     useEffect(() => {
-        if(canvasRef.current){
-            initDraw(canvasRef.current)
+        const ws = new WebSocket("ws://localhost:8080")
+        ws.onopen = () => {
+            if(canvasRef.current ){
+                initDraw(canvasRef.current, ws)
+            }
         }
-    },[canvasRef])
+    },[])
 
     return <div>
         <canvas ref={canvasRef} width={1800} height={900}></canvas>

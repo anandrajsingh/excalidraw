@@ -18,12 +18,18 @@ type Shape = {
     endY: number
 }
 
-export function initDraw(canvas: HTMLCanvasElement) {
+export function initDraw(canvas: HTMLCanvasElement, socket: WebSocket) {
     const ctx = canvas.getContext("2d")
-
+    
     let existingShapes: Shape[] = []
-
+    
     if (!ctx) return;
+
+    socket.onmessage = (event) => {
+        const message = JSON.parse(event.data)
+        existingShapes.push(message)
+        clearCanvas(existingShapes, canvas, ctx)
+    }
 
     clearCanvas(existingShapes, canvas, ctx)
     let clicked = false;
@@ -42,13 +48,17 @@ export function initDraw(canvas: HTMLCanvasElement) {
         const width = e.clientX - startX;
         const height = e.clientY - startY;
 
-        existingShapes.push({
+        let shape: Shape = {
             type: "rect",
             x: startX,
             y: startY,
             height,
             width
-        })
+        }
+
+        existingShapes.push(shape)
+
+        socket.send(JSON.stringify(shape))
     })
 
     canvas.addEventListener("mousemove", (e) => {
