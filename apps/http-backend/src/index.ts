@@ -4,9 +4,11 @@ import { CreateRoomSchema, SigninSchema, SignupSchema } from "@repo/zod/types";
 import Express from "express";
 import jwt from "jsonwebtoken"
 import { AuthRequest, middleware } from "./middleware";
+import cors from "cors"
 
 const app = Express()
 app.use(Express.json())
+app.use(cors())
 
 app.post('/signup', async(req, res) => {
     const parsedData = SignupSchema.safeParse(req.body);
