@@ -12,10 +12,17 @@ export function RoomCanvas({ roomId }: { roomId: string }) {
     const [selectedTool, setSelectedTool] = useState<Tool>("rect");
     
     useEffect(() => {
-        const ws = new WebSocket("ws://localhost:8080")
+        const token = localStorage.getItem("token")
+        
+        const ws = new WebSocket(`ws://localhost:8080?token=${token}`)
+
         ws.onopen = () => {
+            ws.send(JSON.stringify({
+                type: "join_room",
+                roomId
+            }))
             if(canvasRef.current ){
-                initDraw(canvasRef.current, ws)
+                initDraw(canvasRef.current, ws, roomId)
             }
         }
     },[])
