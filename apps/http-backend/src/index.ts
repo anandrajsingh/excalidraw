@@ -50,6 +50,20 @@ app.post("/signin", async(req, res) => {
     res.json({token})
 })
 
+app.get("/room", middleware, async(req:AuthRequest, res) => {
+    const userId = req.user.userId
+    try {
+        const rooms = await prismaClient.room.findMany({
+            where: {
+                adminId:userId
+            }
+        })
+        res.json(rooms)
+    } catch (error) {
+        res.json({Error: "Can't fetch rooms right now"})
+    }
+})
+
 app.post("/room", middleware, async(req:AuthRequest, res) => {
     const parsedData = CreateRoomSchema.safeParse(req.body);
     if(!parsedData.success){
